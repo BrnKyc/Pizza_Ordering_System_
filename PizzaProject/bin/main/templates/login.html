@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:insert="~{fragments/header :: head}">
+	<meta charset="utf-8">
+</head>
+<body>
+	<section>
+    <div class="container mt-5">
+   		<header class="mb-5">
+			<h1 class="text-center">
+				Login page
+			</h1>
+		</header>
+    	<div class="row justify-content-center">
+			<div class="col-md-5">
+    	
+		        <form th:action="@{/login}" method="post" class="p-5 border rounded-3">
+			        <div th:if="${param.logout}">
+							<div class="alert alert-info">You have been logged out.</div>
+					</div>
+		        
+		            <div class="mb-3">
+		                <label for="username" class="form-label">Benutzername</label>
+		                <input type="text" class="form-control" id="username" name="username" placeholder="username	" required autofocus>
+		            </div>
+		            <div class="mb-3">
+		                <label for="password" class="form-label">Passwort</label>
+		                <input type="password" class="form-control" id="password" name="password" placeholder="password" required>
+		            </div>
+		            
+					<div class="mb-3 form-check">
+						<input type="checkbox" class="form-check-input" th:name="remember-me" th:value="true"
+							id="remember-me"> <label class="form-check-label" for="remember-me">Remember me</label>
+					</div>
+					
+		            
+		            <div class="mb-3">
+						<input type="submit" class="btn btn-primary w-100" th:value="einloggen">
+					</div>
+					
+					<div class="register">
+		                <p>Don't have a account ?<a href="/register"> Register!!</a></p>
+		            </div>
+		            
+					<div th:if="${param.error}">
+						<div class="alert alert-danger">
+							<span>Login oder Passwort ist falsch, bitte nochmal
+								versuchen</span>
+						</div>
+					</div>
+
+		        </form>
+        	</div>
+		</div>
+        
+    </div>
+    </section>
+</body>
+</html>
+
+
+
+
+
+

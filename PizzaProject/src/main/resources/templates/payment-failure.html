@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:insert="~{fragments/header :: head}">
+    <meta charset="utf-8">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center text-danger">Payment Failed</h1>
+    <p class="text-center" th:text="${message}"></p>
+    <a href="/cart/cart" class="btn btn-primary mt-3">Return to Cart</a>
+    <a href="/" class="btn btn-secondary mt-3">Go to Home</a>
+</div>
+</body>
+</html>

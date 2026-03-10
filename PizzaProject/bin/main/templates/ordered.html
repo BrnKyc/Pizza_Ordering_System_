@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:insert="~{fragments/header :: head}">
+	<meta charset="utf-8">
+</head>
+<body>
+
+    <div class="container mt-5">
+    	<div th:insert="~{fragments/body :: header }"></div>
+    		<h2>Ihre Geschichte</h2>
+    		<div th:if="${isOrderedEmpty}">
+	            <p class="text-danger">Sie haben keine bestellungen</p>
+	            <a href="/pizzas" class="btn btn-primary">Zur Pizza-Seite</a>
+        	</div>
+        	<!-- If cart is not empty -->
+        <div th:unless="${isOrderedEmpty}">
+    		<table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Anzahl des Pizzas</th>
+                    <th>Größes</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="order : ${orders}">
+                    <td th:text="${orderedItem.name}+'.......'"></td>
+                    <td th:text="${order.numberOfItems}"></td>
+                    <td th:text="${orderedItem.pizzasize}+'.......'"></td>
+                    <td>
+                         <a class="btn btn-outline-primary" 
+							   th:href="@{/order/find(id=${order.id})}">
+							    details
+							</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    		<div th:insert="~{fragments/footer :: footer}"></div>
+    </div>
+    
+</body>
+</html>

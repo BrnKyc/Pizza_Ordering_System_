@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:insert="~{fragments/header :: head}">
+    <meta charset="utf-8">
+    <title>Pizza Selection</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="container mt-5">
+    <div th:insert="~{fragments/body :: header}"></div>
+    <p class="text-center">Hallo :: Was kann ich für dich tun?</p>
+    
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>Alle Pizzas</th>
+            <th>Aktion</th>
+        </tr>
+        </thead>
+        
+        <tbody>
+        <tr th:each="pizza : ${pizzas}">
+            <td th:text="${pizza.name}"></td>
+            <td>
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" 
+                        th:attr="data-bs-target='#modal-' + ${pizza.id}">
+                    Auswählen
+                </button>
+			
+                <!-- Modal -->
+                <div class="modal fade" th:id="'modal-' + ${pizza.id}" tabindex="-1" 
+                     aria-labelledby="modalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" th:text="${pizza.name}"></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form th:action="@{/cart/addToCart}" method="post">
+                                    <div class="mb-3">
+                                        <label for="size" class="form-label">Größe</label>
+                                        <select name="size" class="form-select size-select" data-pizza-id="${pizza.id}">
+										    <option value="Small" th:attr="data-price=${pizza.priceSmall}" th:text="'Small / €' + ${pizza.priceSmall}"></option>
+										    <option value="Medium" th:attr="data-price=${pizza.priceMedium}" th:text="'Medium / €' + ${pizza.priceMedium}"></option>
+										    <option value="Large" th:attr="data-price=${pizza.priceLarge}" th:text="'Large / €' + ${pizza.priceLarge}"></option>
+										</select>
+
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="quantity" class="form-label">Anzahl</label>
+                                        <input type="number" name="quantity" min="1" value="1" 
+                                               class="form-control quantity-input" data-pizza-id="${pizza.id}" 
+                                               style="width: 100px;">
+                                    </div>
+                                    <div class="mb-3">
+                                    <!--  
+                                        <p><strong>Preis:</strong> €<span id="price-${pizza.id}" 
+                                                                          th:text="${pizza.priceSmall}">0.00</span></p>-->
+                                    </div>
+                                    <input type="hidden" name="pizzaId" th:value="${pizza.id}">
+                                    <button type="submit" class="btn btn-primary">In den Warenkorb</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Modal -->
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="mt-3">
+        <p><strong>IM WARENKORB:</strong> Anzahl der bestellten Pizzas: <strong><span th:text="${totalPizzas}">0</span></strong> mit Gesamtbetrag: <strong>€<span th:text="${totalPrice}">0.00</span></strong></p>
+        <div class="d-grid gap-2">
+            <a href="/cart/cart" class="btn btn-outline-secondary">Zum Warenkorb</a>
+        </div>
+    </div>
+    <div th:insert="~{fragments/footer :: footer}"></div>
+</div>
+
+<script>
+    // Update the displayed price dynamically
+    $(document).on("change", ".size-select, .quantity-input", function () {
+        const pizzaId = $(this).data("pizza-id");
+        
+        // Get the selected size and its price
+        const selectedSize = $(`.size-select[data-pizza-id='${pizzaId}'] option:selected`);
+        const pricePerItem = parseFloat(selectedSize.data("price"));
+        
+        // Get the quantity
+        const quantity = parseInt($(`.quantity-input[data-pizza-id='${pizzaId}']`).val());
+
+        // Update the price if all values are valid
+        if (!isNaN(pricePerItem) && !isNaN(quantity)) {
+            const totalPrice = (pricePerItem * quantity).toFixed(2);
+            $(`#price-${pizzaId}`).text(totalPrice);
+        } else {
+            $(`#price-${pizzaId}`).text("0.00");
+        }
+    });
+</script>
+
+</body>
+</html>

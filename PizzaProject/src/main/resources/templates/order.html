@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:insert="~{fragments/header :: head}">
+	<meta charset="utf-8">
+</head>
+<body>
+
+    <div class="container mt-5">
+    	<div th:insert="~{fragments/body :: header }"></div>
+    		<h2>Ihre Bestellung</h2>
+    		
+    		
+    		
+    		
+    		<div class="card">
+        <div class="card-body">
+            <!-- User Details -->
+            <h5 class="card-title">Customer Details</h5>
+            <p><strong>Name:</strong> <span th:text="${customer.firstname} + ' ' + ${customer.lastname}">John Doe</span></p>
+            <p><strong>Phone:</strong> <span th:text="${customer.phoneNumber}">123-456-7890</span></p>
+
+            <!-- Delivery Address -->
+            <h5 class="card-title">Delivery Address</h5>
+            <div th:if="${customer.currentDeliveryAddress != null}">
+                <p th:text="${selectedAddress.street} + ', ' + ${selectedAddress.houseNumber} + ', ' + ${selectedAddress.town} + ', ' + ${selectedAddress.postalCode}">
+                    Sample Street, 123, Sample Town, 45678
+                </p>
+            </div>
+           
+            
+            
+
+            <!-- Ordered Items -->
+            <h5 class="card-title mt-4">Ordered Items</h5>
+            <ul class="list-group">
+                <li class="list-group-item" th:each="item : ${items}">
+                    <span th:text="${item.pizza.name}">Pizza Margherita</span> - 
+                    <span th:text="${item.quantity}">2</span> x 
+                    €<span th:text="${item.pizza.priceMedium}">10.00</span>
+                </li>
+            </ul>
+
+            <!-- Total Price -->
+            <h5 class="mt-4">Total Pizzas: <span th:text="${totalPizzas}">20.00</span></h5>
+            <h5 class="mt-4">Total Price: €<span th:text="${totalPrice}">20.00</span></h5>
+        </div>
+    </div>
+    	<a href="/order/list" class="btn btn-primary">Alle Bestelungen</a>
+    </div>
+   <div th:insert="~{fragments/footer :: footer}"></div>
+    
+    
+</body>
+</html>

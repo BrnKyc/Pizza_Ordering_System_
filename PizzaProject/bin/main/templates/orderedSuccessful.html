@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:insert="~{fragments/header :: head}">
+	<meta charset="utf-8">
+	
+</head>
+<body>
+
+    <div class="container mt-5">
+    	<div th:insert="~{fragments/body :: header }"></div>
+    	<br>
+    		<h2>Ihre Bestellung wird in <span th:text="${orderDuration}"></span> minuten erreichen!</h2><br><br>
+    		<h1 class="text-center text-success">Payment Successful!</h1>
+    <p class="text-center" th:text="${message}"></p>
+    <p class="text-center">Payment Details:</p>
+    <ul class="list-group">
+        <li class="list-group-item">Amount: €<span th:text="${paymentAmount}">20.00</span></li>
+        <li class="list-group-item">Description: <span th:text="${description}">Order Payment</span></li>
+    </ul>
+    <a href="/" class="btn btn-primary mt-3">Go to Home</a>
+    <a href="/order/list" class="btn btn-secondary mt-3">View My Orders</a>
+    		<div th:insert="~{fragments/footer :: footer}"></div>
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:insert="~{fragments/header :: head}">
+	<meta charset="utf-8">
+	<meta name="_csrf" th:content="${_csrf.token}" />
+	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+</head>
+<body>
+
+    <div class="container mt-5">
+    	<div th:insert="~{fragments/body :: header }"></div>
+    		<h1>My Profile</h1>
+		    <div class="card">
+		        <div class="card-body">
+		            <h5 class="card-title">Personal Information</h5>
+		            <p><strong>First Name:</strong> <span th:text="${customer.firstname}">John</span></p>
+		            <p><strong>Last Name:</strong> <span th:text="${customer.lastname}">Doe</span></p>
+		            <p><strong>Phone Number:</strong> <span th:text="${customer.phoneNumber}">Doe</span></p>
+		            <p><strong>Email:</strong> <span th:text="${user.email}">john.doe@example.com</span></p>
+		            <p><strong>Username:</strong> <span th:text="${user.username}">john.doe@example.com</span></p>
+		            <p><strong>Wallet:</strong> <span th:text="${aktuelleGuthaben}">0</span></p>
+		            
+		            
+		             
+		             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPersonalInfoModal">Change Personal Info</button>
+		        </div>
+		    </div>
+    		<!-- Delivery Address Section -->
+    <div class="mb-4">
+    <div class="card">
+    <div class="card-body">
+        <h4>Delivery Address</h4>
+        <p><strong>Current Address:</strong></p>
+        <p th:if="${currentAddress != null}">
+            <span th:text="${currentAddress.street}"></span>, 
+            <span th:text="${currentAddress.houseNumber}"></span>, 
+            <span th:text="${currentAddress.town}"></span>, 
+            <span th:text="${currentAddress.postalCode}"></span>
+        </p>
+        <p th:if="${currentAddress == null}">No address available</p><br>
+		<button class="btn btn-primary" data-toggle="modal" data-target="#addAddressModal">Add Address</button><br>
+        <label for="addressDropdown">Select Another Address:</label>
+		<select id="addressDropdown" class="form-select" onchange="updateCurrentDeliveryAddress()">
+		    <option value="" selected disabled>eine der verfügbaren Adressen auswählen</option>
+		    <option th:each="address : ${addresses}" 
+		            th:value="${address.id}" 
+		            th:text="${address.street + ', ' + address.houseNumber + ', ' + address.town + ', ' + address.postalCode}">
+		    </option>
+		</select>
+        </div>
+    </div>
+    </div>
+    <div th:insert="~{fragments/footer :: footer}"></div>
+    </div>
+    <!-- Modal for Editing Personal Info -->
+<div class="modal fade" id="editPersonalInfoModal" tabindex="-1" aria-labelledby="editPersonalInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editPersonalInfoModalLabel">Edit Personal Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editPersonalInfoForm">
+                    <div class="mb-3">
+                        <label for="firstname" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="firstname" name="firstname" th:value="${customer.firstname}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastname" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="lastname" name="lastname" th:value="${customer.lastname}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="text" class="form-control" id="email" name="email" th:value="${user.email}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" th:value="${customer.phoneNumber}" required>
+                    </div>
+                    
+
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addAddressModalLabel">Add New Delivery Address</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addAddressForm">
+                    <div class="form-group">
+                        <label for="street">Street</label>
+                        <input type="text" class="form-control" id="street" name="street" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="houseNumber">House Number</label>
+                        <input type="text" class="form-control" id="houseNumber" name="houseNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="town">Town</label>
+                        <input type="text" class="form-control" id="town" name="town" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="postalCode">Postal Code</label>
+                        <input type="text" class="form-control" id="postalCode" name="postalCode" required>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="saveAddressBtn">Save Address</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</div>    
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>    
+    
+    <script>
+    document.getElementById("editPersonalInfoForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const updatedCustomerData = {
+            firstname: document.getElementById("firstname").value,
+            lastname: document.getElementById("lastname").value,
+            phoneNumber: document.getElementById("phoneNumber").value,
+            email: document.getElementById("email").value,
+        };
+
+        const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+        fetch('/customer/updateProfile', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [csrfHeader]: csrfToken,
+            },
+            body: JSON.stringify(updatedCustomerData),
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("Profile updated successfully!");
+                location.reload();
+            } else {
+                alert("Error updating profile.");
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+    
+    
+ // Save new address
+    document.getElementById("saveAddressBtn").addEventListener("click", function () {
+        const newAddress = {
+            street: document.getElementById("street").value,
+            houseNumber: document.getElementById("houseNumber").value,
+            town: document.getElementById("town").value,
+            postalCode: document.getElementById("postalCode").value
+        };
+        const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+        fetch('/customer/addAddress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json',
+            	[csrfHeader]: csrfToken,},
+            
+            body: JSON.stringify(newAddress)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("Address added successfully!");
+                location.reload();
+            } else {
+                alert("Error adding address!");
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+ 
+    function updateCurrentDeliveryAddress() {
+        const selectedAddressId = document.getElementById("addressDropdown").value;
+
+        if (!selectedAddressId) {
+            // User has selected the placeholder
+            alert("Bitte wählen Sie eine gültige Adresse aus!"); // "Please select a valid address!"
+            return;
+        }
+
+        const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+        fetch('/customer/updateCurrentAddress', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [csrfHeader]: csrfToken,
+            },
+            body: JSON.stringify({ addressId: selectedAddressId }),
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("Delivery address updated successfully!");
+                location.reload(); // Reload the page to reflect the updated address
+            } else {
+                alert("Error updating delivery address!");
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+</script>
+    
+</body>
+</html>

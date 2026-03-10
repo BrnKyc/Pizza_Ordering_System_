@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- src/main/resources/templates/fragments/header.html -->
+<div th:fragment="header">
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <!-- Pizza Icon and Title -->
+            <a class="navbar-brand" href="/">
+                <img th:src="@{data:image/png;base64,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}" alt="Pizza Icon" width="30" height="30" class="d-inline-block align-top">
+                MyPizza4Ever
+            </a>
+            
+            <!-- Navigation links -->
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <!--  
+                    <li th:if="${#authorization.expression('hasRole(\'ADMIN\')')}">
+			            <a th:href="@{/admin/home}">Admin Dashboard</a>
+			        </li>-->
+                </ul>
+                <!-- Authorization-based content -->
+                <div class="d-flex">
+                	
+                	<div class="btn btn-outline-primary" type="button">
+                        <a class="nav-link" href="/order/list">Bestellungen</a>
+                    </div>
+                    <!-- If user is not authenticated -->
+                    <a sec:authorize="isAnonymous()" href="/login" class="btn btn-outline-primary me-2">Einloggen</a>
+                    <!-- If user is authenticated -->
+                    <div sec:authorize="isAuthenticated()" class="dropdown">
+                        <button class="btn btn-outline-success dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span sec:authentication="name"></span> <!-- Display username -->
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                            <li>
+                            	<a class="nav-link" th:href="@{/customer/{id}(id=${#authentication.principal.id})}" sec:authorize="isAuthenticated()">
+							        <span th:text="${#authentication.principal.username}"></span> Profil
+							    </a>
+                            
+                            </li>
+                            
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:insert="~{fragments/header :: head}">
+	<meta charset="utf-8">
+</head>
+<body>
+
+    <div class="container mt-5">
+    <div th:insert="~{fragments/body :: header }"></div>
+   
+        <p class="text-center">Hallo :: Was kann ich für dich tun?</p>
+        <a href="/adminMenu" class="btn btn-outline-primary disabled" tabindex="-1" aria-disabled="true">Pizza bearbeiten</a>
+        <a href="/user/users" class="btn btn-outline-primary">Users bearbeiten</a>
+        <h2>List of Pizzas</h2>
+        <button class="btn btn-success" data-bs-toggle="modal" th:attr="data-bs-target='#addPizzaModal'"  >Add New Pizza</button>
+        
+		<div class="row" th:each="pizza : ${pizzas}">
+        <div class="col-md-10">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${pizza.name}">Pizza Name</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Price Small: €<span th:text="${pizza.priceSmall}">0.00</span></li>
+                        <li class="list-group-item">Price Medium: €<span th:text="${pizza.priceMedium}">0.00</span></li>
+                        <li class="list-group-item">Price Large: €<span th:text="${pizza.priceLarge}">0.00</span></li>
+                    </ul>
+                    <div class="mt-3">
+                        <button class="btn btn-primary" data-bs-toggle="modal" th:attr="data-bs-target='#editPizzaModal'"
+						        th:data-pizza-id="${pizza.id}"
+						        th:data-pizza-name="${pizza.name}"
+						        th:data-price-small="${pizza.priceSmall}"
+						        th:data-price-medium="${pizza.priceMedium}"
+						        th:data-price-large="${pizza.priceLarge}">
+						    Edit
+						</button>
+
+						<!--  
+                        <button class="btn btn-danger"  th:href="@{/admin/deletePizza/(pizzaId=${pizza.id})}">Delete</button>
+                        -->
+                        <a class="btn btn-outline-danger" 
+							   th:href="@{/admin/deletePizza/(pizzaId=${pizza.id})}">
+							    löschen
+							</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:insert="~{fragments/footer :: footer}"></div>
+</div>
+
+<!-- Add Pizza Modal -->
+<div class="modal fade" th:id="addPizzaModal" tabindex="-1" role="dialog" aria-labelledby="addPizzaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addPizzaModalLabel">Add New Pizza</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/pizza/create}" method="post">
+                    <div class="form-group">
+                        <label for="pizzaName">Name</label>
+                        <input type="text" class="form-control" id="pizzaName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="priceSmall">Small Price</label>
+                        <input type="number" step="0.01" class="form-control" id="priceSmall" name="priceSmall" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="priceMedium">Medium Price</label>
+                        <input type="number" step="0.01" class="form-control" id="priceMedium" name="priceMedium" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="priceLarge">Large Price</label>
+                        <input type="number" step="0.01" class="form-control" id="priceLarge" name="priceLarge" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Pizza</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Pizza Modal -->
+<div class="modal fade" th:id="editPizzaModal" tabindex="-1" role="dialog" aria-labelledby="editPizzaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editPizzaModalLabel">Edit Pizza</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/pizza/update}" method="post">
+                    <input type="hidden" id="editPizzaId" name="id">
+                    <div class="form-group">
+                        <label for="editPizzaName">Name</label>
+                        <input type="text" class="form-control" id="editPizzaName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPriceSmall">Small Price</label>
+                        <input type="number" step="0.01" class="form-control" id="editPriceSmall" name="priceSmall" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPriceMedium">Medium Price</label>
+                        <input type="number" step="0.01" class="form-control" id="editPriceMedium" name="priceMedium" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPriceLarge">Large Price</label>
+                        <input type="number" step="0.01" class="form-control" id="editPriceLarge" name="priceLarge" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    // Populate Edit Pizza Modal
+    $('#editPizzaModal').on('show.bs.modal', function (event) {
+    // Get the button that triggered the modal
+    var button = $(event.relatedTarget);
+
+    // Extract data attributes from the button
+    var pizzaId = button.data('pizza-id');
+    var pizzaName = button.data('pizza-name');
+    var priceSmall = button.data('price-small');
+    var priceMedium = button.data('price-medium');
+    var priceLarge = button.data('price-large');
+
+    // Populate the form fields in the modal
+    $('#editPizzaId').val(pizzaId);
+    $('#editPizzaName').val(pizzaName);
+    $('#editPriceSmall').val(priceSmall);
+    $('#editPriceMedium').val(priceMedium);
+    $('#editPriceLarge').val(priceLarge);
+});
+
+
+ 
+</script>			
+
+    
+</body>
+</html>
